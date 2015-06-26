@@ -33,6 +33,6 @@ java [-Xmx8m] -jar kgrep.jar [-iovVernhp] [--] [files or -]
       will search for all println in current directory
 
      Example with pattern:
-      java -jar kgrep.jar "if \(([^\)]+)\)" -rnep "$1" .
+      java -jar kgrep.jar "if \(([^\)]+)\)" -rnep '$1' .
         will search for if keywords in current directory and print only condition inside (group $1)
 ```
