@@ -20,7 +20,7 @@ class OutputFormatter(val context : Context) {
                 out.append(':')
             }
             out.append(context.currentLine.toString())
-
+            count++
         }
 
         if (count > 0) {
