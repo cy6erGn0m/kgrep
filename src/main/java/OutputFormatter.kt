@@ -29,7 +29,7 @@ class OutputFormatter(val context : Context) {
 
         if (context.invert) {
 //            out.append(line)
-            applyReplacement(out, arrayList(line.toString()), line)
+            applyReplacement(out, listOf(line.toString()), line)
         } else if (context.replacementPattern != null) {
             applyReplacement(out, matcher.getMatchGroups(line), line)
         } else if (context.printOnlyMatched) {
@@ -54,7 +54,7 @@ class OutputFormatter(val context : Context) {
                 "full" ->  line
 
                 else -> {
-                    if (name.matches("[0-9]+")) {
+                    if (name.matches("[0-9]+".toRegex())) {
                         groups[Integer.parseInt(name)]
                     } else {
                         null

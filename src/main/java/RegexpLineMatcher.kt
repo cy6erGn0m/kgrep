@@ -1,32 +1,26 @@
 package cg.kgrep
 
-import java.util.regex.Pattern
-import java.util.regex.Matcher
-import java.util.ArrayList
+import kotlin.text.MatchResult
+import kotlin.text.Regex
+import kotlin.text.RegexOption
 
-class RegexpLineMatcher(val expression : Pattern, ctx : Context) : LineMatcher {
+class RegexpLineMatcher(val expression : Regex, override val context : Context) : LineMatcher {
 
-    override val context: Context = ctx
-    private var lastMatcher : Matcher? = null
-    private val PLACEHOLDER = Pattern.compile("\\$([0-9a-zA-Z]+)", if (ctx.caseInsensitive) {Pattern.CASE_INSENSITIVE} else {0} )
+    private var lastMatch: MatchResult? = null
 
-    override fun matches(line: CharSequence): Boolean {
-        lastMatcher = expression.matcher(line)
-
-        return lastMatcher!!.find()
+    init {
+        assert(context.caseInsensitive == (RegexOption.IGNORE_CASE in expression.options))
     }
 
+    override fun matches(line: CharSequence): Boolean =
+        expression.match(line)?.let { matches ->
+            lastMatch = matches
+            true
+        } ?: false
+
     override fun getMatchGroups(line: CharSequence): List<String> {
-        val m = lastMatcher
-        if (m == null) {
-            throw IllegalStateException()
-        }
+        val m = lastMatch ?: throw IllegalStateException()
 
-        val result = ArrayList<String>(m.groupCount() + 1)
-        for (var i in (0 .. m.groupCount())) {
-            result.add(m.group(i)!!)
-        }
-
-        return result
+        return m.groups.map { it?.value ?: "" }
     }
 }

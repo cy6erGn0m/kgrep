@@ -5,6 +5,7 @@ import kotlin.io.forEachLine
 import java.util.regex.Pattern
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import kotlin.text.RegexOption
 
 fun main(args: Array<String>) {
     val it = args.iterator()
@@ -22,7 +23,7 @@ fun main(args: Array<String>) {
                 when (arg) {
                     "--help" -> forcePrintHelp = true
                     "--version" -> forcePrintVersion = true
-                    else -> throw BadArgException("Unknown option ${arg}")
+                    else -> throw BadArgException("Unknown option $arg")
                 }
             } else {
                 arg.substring(1).toCharArray().forEach { ch ->
@@ -44,7 +45,7 @@ fun main(args: Array<String>) {
                             }
                         }
 
-                        else -> throw BadArgException("Unknown option -${ch}")
+                        else -> throw BadArgException("Unknown option -$ch")
                     }
                 }
             }
@@ -67,12 +68,10 @@ fun main(args: Array<String>) {
             context.inputs.add("-")
         }
 
-        val matcher : LineMatcher = if (context.regexp) {
-            RegexpLineMatcher(Pattern.compile(context.pattern!!), context)
-        } else if (context.caseInsensitive) {
-            CaseInsensitivePlainTextMatcher(context, context.pattern!!)
-        } else {
-            PlainTextMatcher(context, context.pattern!!)
+        val matcher : LineMatcher = when {
+            context.regexp -> RegexpLineMatcher(context.pattern!!.toRegex(if (context.caseInsensitive) setOf(RegexOption.IGNORE_CASE) else emptySet()), context)
+            context.caseInsensitive -> CaseInsensitivePlainTextMatcher(context, context.pattern!!)
+            else -> PlainTextMatcher(context, context.pattern!!)
         }
 
         handle(context, matcher)
@@ -116,10 +115,7 @@ fun handleStream(ctx : Context, matcher : LineMatcher, invert : Boolean, input :
     val formatter = OutputFormatter(ctx)
 
     do {
-        val line = input.readLine()
-        if (line == null) {
-            break
-        }
+        val line = input.readLine() ?: break
 
         if (matcher.matches(line) != invert) {
             formatter.format(line, matcher, System.out)

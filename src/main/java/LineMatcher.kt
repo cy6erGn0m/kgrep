@@ -2,7 +2,7 @@ package cg.kgrep
 
 import java.util.Collections
 
-trait LineMatcher {
+interface LineMatcher {
     val context : Context
     fun matches(line : CharSequence) : Boolean
 
@@ -36,6 +36,6 @@ class CaseInsensitivePlainTextMatcher(ctx : Context, text : String) : LineMatche
             throw IllegalStateException()
         }
 
-        return Collections.singletonList(line.subSequence(lastIndexOf, lastIndexOf + text.size).toString())
+        return Collections.singletonList(line.subSequence(lastIndexOf, lastIndexOf + text.size()).toString())
     }
 }

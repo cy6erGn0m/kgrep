@@ -3,9 +3,9 @@ package cg.kgrep
 import java.util.regex.Matcher
 
 fun CharArray.toLowerCase(): CharArray {
-    val rs = CharArray(this.size)
+    val rs = CharArray(this.size())
 
-    for (val idx in this.indices) {
+    for (idx in indices) {
         rs[idx] = Character.toLowerCase(this[idx])
     }
 
@@ -13,9 +13,9 @@ fun CharArray.toLowerCase(): CharArray {
 }
 
 fun CharSequence.toLowerCase() : CharArray {
-    val rs = CharArray(this.size)
+    val rs = CharArray(length())
 
-    for (val idx in this.length().indices) {
+    for (idx in 0..length() - 1) {
         rs[idx] = Character.toLowerCase(this[idx])
     }
 
@@ -23,24 +23,19 @@ fun CharSequence.toLowerCase() : CharArray {
 }
 
 fun CharArray.indexOf(subString : CharArray) : Int {
-    if (subString.size == 0) {
+    if (subString.isEmpty()) {
         return 0
     }
 
-    val targetSize = subString.size - 1
-    val m = this.size - targetSize
     val firstChar = subString[0]
+    val subStringLastIndex = subString.lastIndex
 
-    if (m == 0) {
-        return -1
-    }
-
-    @main_loop
-    for (var i in (0 .. m - 1)) {
+    mainLoop@
+    for (i in 0..size() - subString.size()) {
         if (this[i] == firstChar) {
-            for (var j in IntRange(i + 1, targetSize)) {
-                if (this[j] != subString[j - i]) {
-                    continue @main_loop
+            for (j in 1 .. subStringLastIndex) {
+                if (this[i + j] != subString[j]) {
+                    continue@mainLoop
                 }
             }
             return i
