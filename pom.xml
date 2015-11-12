@@ -104,7 +104,6 @@
 
                 <configuration>
                     <tagName>${project.artifactId}-${project.version}</tagName>
-                    <preRelease>true</preRelease>
                 </configuration>
 
                 <executions>
