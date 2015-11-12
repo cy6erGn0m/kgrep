@@ -1,8 +1,6 @@
 package cg.kgrep
 
-import java.util.regex.*
-
-val PLACEHOLDER = Pattern.compile("\\$([0-9a-zA-Z]+)")
+val PLACEHOLDER = "\\$([0-9a-zA-Z]+)".toRegex()
 
 class OutputFormatter(val context : Context) {
 
@@ -26,27 +24,22 @@ class OutputFormatter(val context : Context) {
             out.append(':')
         }
 
-        if (context.invert) {
-//            out.append(line)
-            applyReplacement(out, listOf(line.toString()), line)
-        } else if (context.replacementPattern != null) {
-            applyReplacement(out, matcher.getMatchGroups(line), line)
-        } else if (context.printOnlyMatched) {
-            out.append(matcher.getMatchGroups(line)[0])
-        } else {
-            out.append(line)
+        val pattern = context.replacementPattern
+        when {
+            pattern != null -> applyReplacement(out, matcher.getMatchGroups(line), line, pattern)
+            context.invert -> out.append(line)
+            context.printOnlyMatched -> out.append(matcher.getMatchGroups(line)[0])
+            else -> out.append(line)
         }
     }
 
-    private fun applyReplacement(out : Appendable, groups : List<String>, line : CharSequence) {
-        val replacementPattern = context.replacementPattern!!
-
-        val patternMatcher = PLACEHOLDER.matcher(replacementPattern)
+    private fun applyReplacement(out : Appendable, groups : List<String>, line : CharSequence, replacementPattern: String) {
         var lastIndex = 0
 
-        while (patternMatcher.find()) {
-            val name = patternMatcher.group(1)!!
+        for (match in PLACEHOLDER.findAll(replacementPattern)) {
+            val name = match.groups[1]?.value
             val replacement : CharSequence? = when (name) {
+                null -> null
                 "$" -> null
                 "file" -> context.currentFile
                 "line" -> context.currentLine.toString()
@@ -62,10 +55,10 @@ class OutputFormatter(val context : Context) {
             }
 
             if (replacement != null) {
-                out.append(replacementPattern, lastIndex, patternMatcher.start())
+                out.append(replacementPattern, lastIndex, match.range.start)
                 out.append(replacement)
 
-                lastIndex = patternMatcher.end()
+                lastIndex = match.range.end + 1
             }
         }
 

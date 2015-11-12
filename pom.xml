@@ -63,7 +63,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>cg.kgrep.KgrepPackage</mainClass>
+                            <mainClass>cg.kgrep.KgrepKt</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -86,7 +86,7 @@ fun handleFile(ctx : Context, matcher : LineMatcher, input : String) {
     if (input == "-") {
         if (!stdinProcessed) {
             ctx.currentFile = "(stdin)"
-            handleStream(ctx, matcher, ctx.invert, BufferedReader(InputStreamReader(System.`in`)))
+            handleStream(ctx, matcher, BufferedReader(InputStreamReader(System.`in`)))
             stdinProcessed = true
         }
     } else {
@@ -98,13 +98,14 @@ fun handleFile(ctx : Context, matcher : LineMatcher, input : String) {
         } else if (f.exists() && f.isFile) {
             f.reader().buffered(65536).use {
                 ctx.currentFile = f.path
-                handleStream(ctx, matcher, ctx.invert, it)
+                handleStream(ctx, matcher, it)
             }
         }
     }
 }
 
-fun handleStream(ctx : Context, matcher : LineMatcher, invert : Boolean, input : BufferedReader) {
+fun handleStream(ctx: Context, matcher: LineMatcher, input: BufferedReader, out: Appendable = System.out) {
+    val invert = ctx.invert
     var lineNumber = 1
     ctx.currentLineProvider = {lineNumber}
 
@@ -114,8 +115,8 @@ fun handleStream(ctx : Context, matcher : LineMatcher, invert : Boolean, input :
         val line = input.readLine() ?: break
 
         if (matcher.matches(line) != invert) {
-            formatter.format(line, matcher, System.out)
-            System.out.println()
+            formatter.format(line, matcher, out)
+            out.appendln()
         }
 
         lineNumber++
