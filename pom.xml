@@ -6,7 +6,7 @@
 
     <groupId>cg.kgrep</groupId>
     <artifactId>kgrep</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <scm>
         <connection>scm:git:git@github.com:cy6erGn0m/kgrep.git</connection>
