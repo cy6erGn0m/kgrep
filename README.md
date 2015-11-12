@@ -1,6 +1,6 @@
 # kgrep
 
-kgrep is a small example demonstrates simple grep utility written in [Kotlin](http://kotlinlang.org)
+kgrep is a Java grep implementation written in [Kotlin](http://kotlinlang.org)
 
 Key features:
 - search through directory tree (useful on Solaris where no fgrep available by default)
