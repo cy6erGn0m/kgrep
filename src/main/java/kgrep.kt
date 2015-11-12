@@ -1,11 +1,7 @@
 package cg.kgrep
 
-import java.io.File
-import kotlin.io.forEachLine
-import java.util.regex.Pattern
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import kotlin.text.RegexOption
+import java.io.*
+import kotlin.text.*
 
 fun main(args: Array<String>) {
     val it = args.iterator()
@@ -19,7 +15,7 @@ fun main(args: Array<String>) {
         val arg = it.next()
 
         if (!stopOptionsProcessing && arg.startsWith("-")) {
-            if (arg.startsWith("--") && (arg.length() > 2)) {
+            if (arg.startsWith("--") && (arg.length > 2)) {
                 when (arg) {
                     "--help" -> forcePrintHelp = true
                     "--version" -> forcePrintVersion = true
@@ -95,11 +91,11 @@ fun handleFile(ctx : Context, matcher : LineMatcher, input : String) {
         }
     } else {
         val f = File(input)
-        if (f.isDirectory()) {
+        if (f.isDirectory) {
             f.listFiles()?.forEach {
-                handleFile(ctx, matcher, it.getPath())
+                handleFile(ctx, matcher, it.path)
             }
-        } else if (f.exists() && f.isFile()) {
+        } else if (f.exists() && f.isFile) {
             f.reader().buffered(65536).use {
                 ctx.currentFile = f.path
                 handleStream(ctx, matcher, ctx.invert, it)

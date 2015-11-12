@@ -1,7 +1,6 @@
 package cg.kgrep
 
-import java.util.regex.Pattern
-import java.util.regex.Matcher
+import java.util.regex.*
 
 val PLACEHOLDER = Pattern.compile("\\$([0-9a-zA-Z]+)")
 
@@ -70,6 +69,6 @@ class OutputFormatter(val context : Context) {
             }
         }
 
-        out.append(replacementPattern, lastIndex, replacementPattern.length())
+        out.append(replacementPattern, lastIndex, replacementPattern.length)
     }
 }

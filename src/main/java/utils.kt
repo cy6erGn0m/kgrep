@@ -1,9 +1,7 @@
 package cg.kgrep
 
-import java.util.regex.Matcher
-
 fun CharArray.toLowerCase(): CharArray {
-    val rs = CharArray(this.size())
+    val rs = CharArray(this.size)
 
     for (idx in indices) {
         rs[idx] = Character.toLowerCase(this[idx])
@@ -13,9 +11,9 @@ fun CharArray.toLowerCase(): CharArray {
 }
 
 fun CharSequence.toLowerCase() : CharArray {
-    val rs = CharArray(length())
+    val rs = CharArray(length)
 
-    for (idx in 0..length() - 1) {
+    for (idx in 0..length - 1) {
         rs[idx] = Character.toLowerCase(this[idx])
     }
 
@@ -31,7 +29,7 @@ fun CharArray.indexOf(subString : CharArray) : Int {
     val subStringLastIndex = subString.lastIndex
 
     mainLoop@
-    for (i in 0..size() - subString.size()) {
+    for (i in 0..size - subString.size) {
         if (this[i] == firstChar) {
             for (j in 1 .. subStringLastIndex) {
                 if (this[i + j] != subString[j]) {

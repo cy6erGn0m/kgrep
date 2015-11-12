@@ -1,6 +1,6 @@
 package cg.kgrep
 
-import java.util.Collections
+import java.util.*
 
 interface LineMatcher {
     val context : Context
@@ -36,6 +36,6 @@ class CaseInsensitivePlainTextMatcher(ctx : Context, text : String) : LineMatche
             throw IllegalStateException()
         }
 
-        return Collections.singletonList(line.subSequence(lastIndexOf, lastIndexOf + text.size()).toString())
+        return Collections.singletonList(line.subSequence(lastIndexOf, lastIndexOf + text.size).toString())
     }
 }

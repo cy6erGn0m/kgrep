@@ -8,9 +8,13 @@
     <artifactId>kgrep</artifactId>
     <version>1.0</version>
 
+    <scm>
+        <connection>scm:git:git@github.com:cy6erGn0m/kgrep.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
-        <kotlin.version>0.12.613</kotlin.version>
+        <kotlin.version>1.0.0-beta-1103</kotlin.version>
     </properties>
 
     <dependencies>
@@ -53,10 +57,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kdoc-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.5.5</version>
@@ -89,6 +89,45 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>cy.github</groupId>
+                <artifactId>github-release-plugin</artifactId>
+                <version>0.5.1</version>
+
+                <configuration>
+                    <tagName>${project.artifactId}-${project.version}</tagName>
+                    <preRelease>true</preRelease>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>gh-upload</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+
+    <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-cy6ergn0m-maven</id>
+            <name>bintray-plugins</name>
+            <url>http://dl.bintray.com/cy6ergn0m/maven</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

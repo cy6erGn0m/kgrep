@@ -1,8 +1,6 @@
 package cg.kgrep
 
-import kotlin.text.MatchResult
-import kotlin.text.Regex
-import kotlin.text.RegexOption
+import kotlin.text.*
 
 class RegexpLineMatcher(val expression : Regex, override val context : Context) : LineMatcher {
 
@@ -13,7 +11,7 @@ class RegexpLineMatcher(val expression : Regex, override val context : Context) 
     }
 
     override fun matches(line: CharSequence): Boolean =
-        expression.match(line)?.let { matches ->
+        expression.find(line)?.let { matches ->
             lastMatch = matches
             true
         } ?: false

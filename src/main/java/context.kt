@@ -9,7 +9,7 @@ class Context(var caseInsensitive : Boolean = false, var printOnlyMatched : Bool
 
     var invert = false
     var replacementPattern : String? = null
-    var inputs : MutableList<String> = arrayListOf<String>()
+    var inputs : MutableList<String> = arrayListOf()
     var pattern : String? = null
     var regexp = false
     var recursive = false
